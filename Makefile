@@ -78,6 +78,9 @@ endef
 $(foreach dep, $(GO_DEPENDENCIES), $(eval $(call make-go-dependency, $(dep))))
 ci: lint-reports test-reports govulncheck ## Executes vulnerability scan, lint, test and generates reports
 
+release: ## Generates and publishes a release
+	@./release.sh
+
 help: ## Shows the help
 	@echo 'Usage: make <OPTIONS> ... <TARGETS>'
 	@echo ''
