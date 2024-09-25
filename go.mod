@@ -1,4 +1,4 @@
-module github.com/ZerGo0/fontsourcedownloader
+module github.com/zergo0/fontsourcedownloader
 
 go 1.23.1
 

@@ -11,8 +11,8 @@ import (
 	// see https://martin.baillie.id/wrote/gotchas-in-the-go-network-packages-defaults/#bonus-gomaxprocs-containers-and-the-cfs
 	"go.uber.org/automaxprocs/maxprocs"
 
-	"github.com/ZerGo0/fontsourcedownloader/internal/log"
-	"github.com/ZerGo0/fontsourcedownloader/pkg/services/fontsource"
+	"github.com/zergo0/fontsourcedownloader/internal/log"
+	"github.com/zergo0/fontsourcedownloader/pkg/services/fontsource"
 )
 
 func main() {
