@@ -198,9 +198,11 @@ func downloadFont(ctx context.Context, logger *slog.Logger, outputDir, formats, 
 							Type:         font.Type,
 						}
 					} else {
-						sucessfullyDownloadedFont.Subsets = append(sucessfullyDownloadedFont.Subsets, subset)
-						sucessfullyDownloadedFont.Weights = append(sucessfullyDownloadedFont.Weights, weight)
-						sucessfullyDownloadedFont.Styles = append(sucessfullyDownloadedFont.Styles, style)
+						addSubsetIfNotPresent(&sucessfullyDownloadedFont, subset)
+
+						addWeightIfNotPresent(&sucessfullyDownloadedFont, weight)
+
+						addStyleIfNotPresent(&sucessfullyDownloadedFont, style)
 					}
 				}
 			}
@@ -208,4 +210,46 @@ func downloadFont(ctx context.Context, logger *slog.Logger, outputDir, formats, 
 	}
 
 	return sucessfullyDownloadedFont
+}
+
+func addSubsetIfNotPresent(sucessfullyDownloadedFont *Font, subset string) {
+	foundSubset := false
+	for i := range sucessfullyDownloadedFont.Subsets {
+		if sucessfullyDownloadedFont.Subsets[i] == subset {
+			foundSubset = true
+			break
+		}
+	}
+
+	if !foundSubset {
+		sucessfullyDownloadedFont.Subsets = append(sucessfullyDownloadedFont.Subsets, subset)
+	}
+}
+
+func addWeightIfNotPresent(sucessfullyDownloadedFont *Font, weight int) {
+	foundWeight := false
+	for i := range sucessfullyDownloadedFont.Weights {
+		if sucessfullyDownloadedFont.Weights[i] == weight {
+			foundWeight = true
+			break
+		}
+	}
+
+	if !foundWeight {
+		sucessfullyDownloadedFont.Weights = append(sucessfullyDownloadedFont.Weights, weight)
+	}
+}
+
+func addStyleIfNotPresent(sucessfullyDownloadedFont *Font, style string) {
+	foundStyle := false
+	for i := range sucessfullyDownloadedFont.Styles {
+		if sucessfullyDownloadedFont.Styles[i] == style {
+			foundStyle = true
+			break
+		}
+	}
+
+	if !foundStyle {
+		sucessfullyDownloadedFont.Styles = append(sucessfullyDownloadedFont.Styles, style)
+	}
 }
