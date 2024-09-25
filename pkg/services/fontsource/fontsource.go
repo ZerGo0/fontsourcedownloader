@@ -3,6 +3,7 @@ package fontsource
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"log/slog"
@@ -13,6 +14,30 @@ import (
 	"strings"
 	"time"
 )
+
+const (
+	useragent   = "Fontsource Downloader (https://github.com/ZerGo0/fontsourcedownloader)"
+	filePerms   = 0o600
+	timeoutSecs = 10
+)
+
+var (
+	errUnexpectedStatusCode = errors.New("unexpected status code")
+)
+
+type Font struct {
+	ID           string   `json:"id"`
+	Family       string   `json:"family"`
+	Subsets      []string `json:"subsets"`
+	Weights      []int    `json:"weights"`
+	Styles       []string `json:"styles"`
+	DefSubset    string   `json:"defSubset"`
+	Variable     bool     `json:"variable"`
+	LastModified string   `json:"lastModified"`
+	Category     string   `json:"category"`
+	License      string   `json:"license"`
+	Type         string   `json:"type"`
+}
 
 func DownloadFonts(ctx context.Context, logger *slog.Logger, outputDir, formats, weights, styles, subsets string) error {
 	logger.InfoContext(ctx, "starting font source downloader")
@@ -56,28 +81,22 @@ func DownloadFonts(ctx context.Context, logger *slog.Logger, outputDir, formats,
 	return nil
 }
 
-type Font struct {
-	ID           string   `json:"id"`
-	Family       string   `json:"family"`
-	Subsets      []string `json:"subsets"`
-	Weights      []int    `json:"weights"`
-	Styles       []string `json:"styles"`
-	DefSubset    string   `json:"defSubset"`
-	Variable     bool     `json:"variable"`
-	LastModified string   `json:"lastModified"`
-	Category     string   `json:"category"`
-	License      string   `json:"license"`
-	Type         string   `json:"type"`
-}
-
 func fetchFonts(ctx context.Context, logger *slog.Logger) ([]Font, error) {
 	logger.InfoContext(ctx, "fetching fonts")
 
 	httpClient := &http.Client{
-		Timeout: 10 * time.Second,
+		Timeout: timeoutSecs * time.Second,
 	}
 
-	resp, err := httpClient.Get("https://api.fontsource.org/v1/fonts")
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, "https://api.fontsource.org/v1/fonts", nil)
+	if err != nil {
+		logger.ErrorContext(ctx, "an error occurred", slog.String("error", err.Error()))
+		return nil, err
+	}
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("User-Agent", useragent)
+
+	resp, err := httpClient.Do(req)
 	if err != nil {
 		logger.ErrorContext(ctx, "an error occurred", slog.String("error", err.Error()))
 		return nil, err
@@ -86,7 +105,7 @@ func fetchFonts(ctx context.Context, logger *slog.Logger) ([]Font, error) {
 
 	if resp.StatusCode != http.StatusOK {
 		logger.ErrorContext(ctx, "an error occurred", slog.String("error", resp.Status))
-		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+		return nil, fmt.Errorf("%w: %d", errUnexpectedStatusCode, resp.StatusCode)
 	}
 
 	var fonts []Font
@@ -103,14 +122,14 @@ func downloadFont(ctx context.Context, logger *slog.Logger, outputDir, formats, 
 	logger.InfoContext(ctx, "downloading font", slog.String("id", font.ID))
 
 	httpClient := &http.Client{
-		Timeout: 10 * time.Second,
+		Timeout: timeoutSecs * time.Second,
 	}
 
 	splitFormats := strings.Split(formats, ",")
 	splitStyles := strings.Split(styles, ",")
 	splitSubsets := strings.Split(subsets, ",")
 
-	var splitWeights []int
+	splitWeights := make([]int, 0)
 	for _, weight := range strings.Split(weights, ",") {
 		convertedWeight, err := strconv.Atoi(weight)
 		if err != nil {
@@ -129,7 +148,14 @@ func downloadFont(ctx context.Context, logger *slog.Logger, outputDir, formats, 
 				for _, subset := range splitSubsets {
 					url := fmt.Sprintf("https://cdn.jsdelivr.net/fontsource/fonts/%s@latest/%s-%d-%s.%s", font.ID, subset, weight, style, format)
 
-					resp, err := httpClient.Get(url)
+					req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
+					if err != nil {
+						logger.ErrorContext(ctx, "an error occurred", slog.String("error", err.Error()))
+						continue
+					}
+					req.Header.Set("User-Agent", useragent)
+
+					resp, err := httpClient.Do(req)
 					if err != nil {
 						logger.ErrorContext(ctx, "an error occurred", slog.String("error", err.Error()))
 						continue
@@ -150,7 +176,7 @@ func downloadFont(ctx context.Context, logger *slog.Logger, outputDir, formats, 
 						continue
 					}
 
-					if err := os.WriteFile(outputPath, body, 0o644); err != nil {
+					if err := os.WriteFile(outputPath, body, filePerms); err != nil {
 						logger.ErrorContext(ctx, "an error occurred", slog.String("error", err.Error()))
 						continue
 					}

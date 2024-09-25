@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"io"
 	"log/slog"
+	"os"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -13,6 +14,8 @@ import (
 )
 
 func TestNewSpanContextHandler(t *testing.T) {
+	os.Setenv("ENV", "prod")
+
 	jsonHandler := slog.NewJSONHandler(io.Discard, nil)
 
 	for _, testcase := range []struct {

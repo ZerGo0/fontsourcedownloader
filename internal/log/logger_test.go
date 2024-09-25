@@ -10,6 +10,8 @@ import (
 )
 
 func TestNew(t *testing.T) {
+	os.Setenv("ENV", "prod")
+
 	for _, testcase := range []struct {
 		name  string
 		level string

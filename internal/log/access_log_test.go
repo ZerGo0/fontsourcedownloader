@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"context"
 	"log/slog"
+	"os"
 	"testing"
 
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/interceptors/logging"
@@ -11,6 +12,8 @@ import (
 )
 
 func TestInterceptorLogger(t *testing.T) {
+	os.Setenv("ENV", "prod")
+
 	testcases := []struct {
 		Name string
 
