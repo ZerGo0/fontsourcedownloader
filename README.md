@@ -43,6 +43,16 @@ make all
 This will initialize a git repo, download the dependencies in the latest versions and install all needed tools.
 If needed code generation will be triggered in this target as well.
 
+### Run
+
+To run the application you can use the following command
+
+```bash
+make run ARGS="-out /path/to/output"
+```
+
+You can find all possible arguments above.
+
 ### Test & lint
 
 Run linting
