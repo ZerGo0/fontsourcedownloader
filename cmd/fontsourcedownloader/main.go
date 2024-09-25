@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"context"
@@ -15,7 +15,7 @@ import (
 	"github.com/zergo0/fontsourcedownloader/pkg/services/fontsource"
 )
 
-func main() {
+func Execute() {
 	outputDir := flag.String("out", "", "output directory")
 	formats := flag.String("formats", "woff2,woff", "font formats comma separated")
 	weights := flag.String("weights", "400", "font weights comma separated")

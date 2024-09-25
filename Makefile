@@ -23,7 +23,7 @@ fmt: ## Formats all code with go fmt
 	@go fmt ./...
 
 run: fmt ## Run the app
-	@go run ./cmd/fontsourcedownloader/main.go $(ARGS)
+	@go run ./main.go $(ARGS)
 
 test-build: ## Tests whether the code compiles
 	@go build -o /dev/null ./...
