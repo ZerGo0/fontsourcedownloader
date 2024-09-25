@@ -2,19 +2,25 @@
 
 This tool allows you to download all fonts from [Fountsource](https://fontsource.org) to your desired location using [jsdelivr](https://www.jsdelivr.com/) to download them.
 
+## Installation
+
+```bash
+go install github.com/zergo0/fontsourcedownloader/@latest
+```
+
 ## Usage
 
 ```bash
-make run ARGS="-out /path/to/output"
+fontsourcedownloader -out /path/to/output
 ```
 
 Possible arguments:
 
-- `-out` - output path
-- `-formats` - comma separated list of formats to download
-- `-weights` - comma separated list of weights to download
-- `-styles` - comma separated list of styles to download
-- `-subsets` - comma separated list of subsets to download
+- `-out` - output path (ex: `/path/to/output`)
+- `-formats` - comma separated list of formats to download (ex: `woff2,woff`)
+- `-weights` - comma separated list of weights to download (ex: `400,700`)
+- `-styles` - comma separated list of styles to download (ex: `normal,italic`)
+- `-subsets` - comma separated list of subsets to download (ex: `latin,latin-ext`)
 
 ## Development
 
