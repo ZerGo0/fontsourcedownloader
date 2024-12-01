@@ -5,7 +5,7 @@ go 1.23.1
 require (
 	github.com/golangci/golangci-lint v1.61.0
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.1.0
-	github.com/stretchr/testify v1.9.0
+	github.com/stretchr/testify v1.10.0
 	go.opentelemetry.io/otel/trace v1.32.0
 	go.uber.org/automaxprocs v1.6.0
 	golang.org/x/vuln v1.1.3
