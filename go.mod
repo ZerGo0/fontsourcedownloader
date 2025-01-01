@@ -4,7 +4,7 @@ go 1.23.1
 
 require (
 	github.com/golangci/golangci-lint v1.62.2
-	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.1.0
+	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.2.0
 	github.com/stretchr/testify v1.10.0
 	go.opentelemetry.io/otel/trace v1.33.0
 	go.uber.org/automaxprocs v1.6.0
@@ -189,7 +189,7 @@ require (
 	golang.org/x/text v0.20.0 // indirect
 	golang.org/x/tools v0.27.0 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20240924160255-9d4c2d233b61 // indirect
-	google.golang.org/grpc v1.67.0 // indirect
+	google.golang.org/grpc v1.67.1 // indirect
 	google.golang.org/protobuf v1.34.2 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
