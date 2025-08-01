@@ -2,7 +2,7 @@ module github.com/zergo0/fontsourcedownloader
 
 go 1.23.1
 
-toolchain go1.24.4
+toolchain go1.24.5
 
 require (
 	github.com/golangci/golangci-lint v1.64.8
