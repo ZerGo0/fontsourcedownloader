@@ -6,7 +6,7 @@ toolchain go1.26.6
 
 require (
 	github.com/golangci/golangci-lint v1.64.8
-	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.3
+	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.4
 	github.com/stretchr/testify v1.12.1
 	go.opentelemetry.io/otel/trace v1.44.0
 	go.uber.org/automaxprocs v1.6.0
