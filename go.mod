@@ -10,7 +10,7 @@ require (
 	github.com/stretchr/testify v1.11.1
 	go.opentelemetry.io/otel/trace v1.44.0
 	go.uber.org/automaxprocs v1.6.0
-	golang.org/x/vuln v1.6.0
+	golang.org/x/vuln v1.7.0
 )
 
 require (
